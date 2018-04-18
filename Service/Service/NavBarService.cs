@@ -3,7 +3,9 @@ using IService;
 using Service.Entity;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -11,7 +13,7 @@ namespace Service.Service
 {
     public class NavBarService : INavBarService
     {
-        public long Add(long menuId, string menuName, string url, long sort)
+        public async Task<long> Add(long menuId, string menuName, string url, long sort)
         {
             using (MyDbContext dbc = new MyDbContext())
             {
@@ -22,11 +24,11 @@ namespace Service.Service
                 entity.ParentId = 0;
                 entity.Sort = sort;
                 dbc.NavBars.Add(entity);
-                dbc.SaveChanges();
+                await dbc.SaveChangesAsync();
                 return entity.Id;
             }
         }
-        public bool Update(long id, string menuName, string url, long sort)
+        public async Task<bool> Update(long id, string menuName, string url, long sort)
         {
             using (MyDbContext dbc = new MyDbContext())
             {
@@ -38,11 +40,11 @@ namespace Service.Service
                 entity.MenuName = menuName;
                 entity.Url = url;
                 entity.Sort = sort;
-                dbc.SaveChanges();
+                await dbc.SaveChangesAsync();
                 return true;
             }
         }
-        public long AddChild(string menuName, string url, long sort, long parentId)
+        public async Task<long> AddChild(string menuName, string url, long sort, long parentId)
         {
             using (MyDbContext dbc = new MyDbContext())
             {
@@ -53,15 +55,15 @@ namespace Service.Service
                 entity.Sort = sort;
                 entity.ParentId = parentId;
                 dbc.NavBars.Add(entity);
-                dbc.SaveChanges();
+                await dbc.SaveChangesAsync();
                 return entity.Id;
             }
         }
-        public NavBarDTO GetById(long id)
+        public async Task<NavBarDTO> GetById(long id)
         {
             using (MyDbContext dbc = new MyDbContext())
             {
-                var entity = dbc.GetAll<NavBarEntity>().SingleOrDefault(n => n.Id == id);
+                var entity = await dbc.GetAll<NavBarEntity>().SingleOrDefaultAsync(n => n.Id == id);
                 if (entity == null)
                 {
                     return null;
@@ -69,12 +71,16 @@ namespace Service.Service
                 return ToDTO(entity);
             }
         }
-        public NavBarDTO[] GetByParentId(long id)
+        public async Task<NavBarDTO[]> GetByParentId(long id)
         {
             using (MyDbContext dbc = new MyDbContext())
             {
                 var navbars = dbc.GetAll<NavBarEntity>().Where(n=>n.ParentId==id);
-                return navbars.OrderBy(n => n.Sort).ToList().Select(n => ToDTO(n)).ToArray();
+
+                //Expression<Func<NavBarEntity, NavBarDTO>> func = n => ToDTO(n);
+
+                var entities= await navbars.OrderBy(n => n.Sort).ToArrayAsync();
+                return entities.Select(n=>ToDTO(n)).ToArray();
             }
         }
         private NavBarDTO ToDTO(NavBarEntity entity)

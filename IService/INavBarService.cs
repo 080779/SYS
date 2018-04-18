@@ -9,10 +9,10 @@ namespace IService
 {
     public interface INavBarService:IServiceSupport
     {
-        long Add(long menuId, string menuName,string url,long sort);
-        bool Update(long id, string menuName, string url, long sort);
-        long AddChild(string menuName, string url, long sort, long parentId);
-        NavBarDTO GetById(long id);
-        NavBarDTO[] GetByParentId(long id);
+        Task<long> Add(long menuId, string menuName,string url,long sort);
+        Task<bool> Update(long id, string menuName, string url, long sort);
+        Task<long> AddChild(string menuName, string url, long sort, long parentId);
+        Task<NavBarDTO> GetById(long id);
+        Task<NavBarDTO[]> GetByParentId(long id);
     }
 }

@@ -1,11 +1,9 @@
 ﻿@model DTO.NavBarDTO[]
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <link href="/Areas/Admin/assets/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="/Areas/Admin/assets/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="/Areas/Admin/css/style.css" />
-    <link href="/Areas/Admin/assets/css/codemirror.css" rel="stylesheet">
+    <link rel="stylesheet" href="/Areas/Admin/assets/css/codemirror.css">
     <link rel="stylesheet" href="/Areas/Admin/assets/css/ace.min.css" />
     <link rel="stylesheet" href="/Areas/Admin/assets/css/font-awesome.min.css" />
     <script src="/Areas/Admin/assets/js/jquery.min.js"></script>
@@ -69,7 +67,7 @@
                                     <td class="td-manage">
                                         <a title="编辑" onclick="member_edit('@navbar.Id')" href="javascript:;" class="btn btn-xs btn-info"><i class="icon-edit bigger-120"></i></a>
                                         <a title="删除" href="javascript:;" onclick="member_del(this,'1')" class="btn btn-xs btn-warning"><i class="icon-trash  bigger-120"></i></a>
-                                        <a title="子栏目列表" href="/admin/navbar/children?menuId=@(navbar.MenuId)" class="btn btn-xs btn-info"><i class="icon-edit bigger-120"></i></a>
+                                        <a title="子栏目列表" href="/admin/navbar/children?menuId=@(navbar.MenuId)" class="btn btn-xs btn-info">子栏目列表</a>
                                     </td>
                                 </tr>
                             }
@@ -129,12 +127,8 @@
                         url: "/admin/navbar/addparent", type: "post", data: { menuId: menuId, menuName: menuName, url: url, sort: sort },
                         success: function (res) {
                             if (res.status == "1") {
-                                layer.alert('添加成功', {
-                                    title: '提示框',
-                                    icon: 1,
-                                });
-                                layer.close(index);
-                                parent.location.reload;
+                                alert("添加成功！");
+                                window.location.reload()
                             }
                         },
                         error: function () {

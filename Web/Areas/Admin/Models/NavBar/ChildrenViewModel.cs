@@ -8,7 +8,7 @@ namespace Web.Areas.Admin.Models.NavBar
 {
     public class ChildrenViewModel
     {
-        public NavBarDTO[] NavBars { get; set; }
+        public IEnumerable<NavBarDTO> NavBars { get; set; }
         public long ParentId { get; set; }
     }
 }
